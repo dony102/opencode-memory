@@ -35,3 +35,16 @@ Each memory record includes:
 - `sql.js` avoids native compilation problems on Windows.
 - stdio transport matches OpenCode MCP integration model.
 - JSON payloads keep tool interfaces stable and explicit.
+
+## Retrieval semantics (`search_memories`)
+
+- Query is tokenized by whitespace and matched case-insensitively.
+- All query terms must match at least one indexed field (`content`, `title`, `category`, `tags`, or `project`).
+- Relevance is weighted and deterministic:
+  - `title` match = 8 points
+  - `content` match = 5 points
+  - `category` match = 3 points
+  - `tags` match = 2 points
+  - `project` match = 2 points
+- Results are sorted by `relevance_score DESC`, then `updated_at DESC`, then `id DESC`.
+- List/search limits are normalized and capped (`1..100`) to protect runtime stability.

@@ -126,6 +126,7 @@ mcp:
 - Getting Started: `docs/getting-started.md`
 - Operations and Update Strategy: `docs/operations.md`
 - Feature parity matrix: `docs/parity-matrix.md`
+- Feature parity matrix v2 (release roadmap): `docs/parity-matrix-v2.md`
 - Contributing guide: `CONTRIBUTING.md`
 - Changelog: `CHANGELOG.md`
 

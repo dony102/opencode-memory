@@ -16,6 +16,28 @@ const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const DATA_DIR = path.join(PROJECT_ROOT, "data");
 const DB_PATH = path.join(DATA_DIR, "memories.db");
+const DEFAULT_LIMIT = 20;
+const MAX_LIMIT = 100;
+
+const normalizeLimit = (limit: number | undefined): number => {
+  if (limit === undefined || Number.isNaN(limit)) {
+    return DEFAULT_LIMIT;
+  }
+  if (limit < 1) {
+    return 1;
+  }
+  if (limit > MAX_LIMIT) {
+    return MAX_LIMIT;
+  }
+  return Math.floor(limit);
+};
+
+const normalizeOffset = (offset: number | undefined): number => {
+  if (offset === undefined || Number.isNaN(offset) || offset < 0) {
+    return 0;
+  }
+  return Math.floor(offset);
+};
 
 export class MemoryDB {
   private db: SqlJsDatabase | null = null;
@@ -119,7 +141,7 @@ export class MemoryDB {
   }
 
   search(input: SearchMemoriesInput): Memory[] {
-    const limit = input.limit ?? 20;
+    const limit = normalizeLimit(input.limit);
     const rawTerms = input.query
       .split(/\s+/)
       .filter((t) => t.length > 0);
@@ -129,39 +151,58 @@ export class MemoryDB {
     }
 
     const conditions: string[] = [];
-    const params: (string | number)[] = [];
+    const scoreParts: string[] = [];
+    const scoreParams: (string | number)[] = [];
+    const whereParams: (string | number)[] = [];
 
     const termConditions: string[] = [];
     for (const term of rawTerms) {
-      const likeTerm = "%" + term + "%";
-      termConditions.push(
-        "(content LIKE ? OR title LIKE ? OR category LIKE ? OR tags LIKE ?)"
+      const normalizedTerm = term.toLowerCase();
+      const likeTerm = "%" + normalizedTerm + "%";
+
+      scoreParts.push(
+        "(CASE WHEN LOWER(title) LIKE ? THEN 8 ELSE 0 END + " +
+          "CASE WHEN LOWER(content) LIKE ? THEN 5 ELSE 0 END + " +
+          "CASE WHEN LOWER(category) LIKE ? THEN 3 ELSE 0 END + " +
+          "CASE WHEN LOWER(tags) LIKE ? THEN 2 ELSE 0 END + " +
+          "CASE WHEN LOWER(project) LIKE ? THEN 2 ELSE 0 END)"
       );
-      params.push(likeTerm, likeTerm, likeTerm, likeTerm);
+      scoreParams.push(likeTerm, likeTerm, likeTerm, likeTerm, likeTerm);
+
+      termConditions.push(
+        "(LOWER(content) LIKE ? OR LOWER(title) LIKE ? OR LOWER(category) LIKE ? OR LOWER(tags) LIKE ? OR LOWER(project) LIKE ?)"
+      );
+      whereParams.push(likeTerm, likeTerm, likeTerm, likeTerm, likeTerm);
     }
     conditions.push("(" + termConditions.join(" AND ") + ")");
 
     if (input.category) {
       conditions.push("category = ?");
-      params.push(input.category);
+      whereParams.push(input.category);
     }
     if (input.project) {
       conditions.push("project = ?");
-      params.push(input.project);
+      whereParams.push(input.project);
     }
 
-    params.push(limit);
-
     const whereClause = "WHERE " + conditions.join(" AND ");
+    const scoreSql = scoreParts.length > 0 ? scoreParts.join(" + ") : "0";
 
-    const sql = "SELECT * FROM memories " + whereClause + " ORDER BY updated_at DESC LIMIT ?";
+    const sql =
+      "SELECT *, (" +
+      scoreSql +
+      ") AS relevance_score FROM memories " +
+      whereClause +
+      " ORDER BY relevance_score DESC, updated_at DESC, id DESC LIMIT ?";
+
+    const params = [...scoreParams, ...whereParams, limit];
 
     return this.queryAll(sql, params) as unknown as Memory[];
   }
 
   list(input: ListMemoriesInput): Memory[] {
-    const limit = input.limit ?? 20;
-    const offset = input.offset ?? 0;
+    const limit = normalizeLimit(input.limit);
+    const offset = normalizeOffset(input.offset);
     const conditions: string[] = [];
     const params: (string | number)[] = [];
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0 (in progress)
+
+- Upgraded search relevance with weighted ranking across title/content/category/tags/project
+- Added deterministic ordering for search results (`relevance_score`, `updated_at`, `id`)
+- Added normalized limits with hard caps for list/search requests
+- Updated architecture docs with explicit retrieval semantics
+
 ## 1.1.0
 
 - Re-architected MCP server into modular folders (`constants`, `handlers`, `servers`, `utils`)
