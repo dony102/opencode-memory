@@ -24,7 +24,7 @@ This document converts parity goals into measurable release milestones.
 | Query layer | Practical retrieval quality | In Progress | Weighted ranking + deterministic ordering + normalized limits |
 | Timeline retrieval | Chronological context reconstruction | In Progress | `timeline_memories` tool added with filters and offset paging |
 | Compression/Summary | Reduce noise from long memory sets | Planned | Summarization pipeline generates compact session briefs |
-| Privacy controls | Respect sensitive memory boundaries | Planned | Tag-based filter (`private/internal/shareable`) enforced in read paths |
+| Privacy controls | Respect sensitive memory boundaries | In Progress | Visibility policy (`private/internal/shareable`) enforced in read paths |
 | Read-only viewer UI | Human-friendly history exploration | Planned | Lightweight docs UI can browse/filter memories |
 | Automation sync | Upstream-aware maintenance | In Progress | Scheduled update works with conflict strategy and reporting |
 | Testing harness | Regression protection | Planned | Unit tests for validators/router/DB + smoke test in CI |
@@ -65,10 +65,10 @@ This document converts parity goals into measurable release milestones.
 
 **Theme:** Memory governance for team usage.
 
-- [ ] Add policy tags (`private`, `internal`, `shareable`)
-- [ ] Enforce policy filtering in all retrieval endpoints
+- [x] Add policy tags (`private`, `internal`, `shareable`)
+- [x] Enforce policy filtering in all retrieval endpoints
 - [ ] Add optional redaction helper for exports
-- [ ] Document governance model in operations guide
+- [x] Document governance model in operations guide
 
 **Definition of Done:**
 - Policy tags persisted and respected at read time

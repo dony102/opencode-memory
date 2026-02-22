@@ -15,6 +15,11 @@ export const TOOL_DEFINITIONS = [
           description: "Optional tags for filtering",
         },
         project: { type: "string", description: "Project name this memory relates to" },
+        visibility: {
+          type: "string",
+          enum: ["private", "internal", "shareable"],
+          description: "Privacy level. Defaults to internal",
+        },
       },
       required: ["content"],
     },
@@ -28,6 +33,15 @@ export const TOOL_DEFINITIONS = [
         query: { type: "string", description: "Search query (supports multiple terms)" },
         category: { type: "string", description: "Filter by category" },
         project: { type: "string", description: "Filter by project" },
+        visibility: {
+          type: "string",
+          enum: ["private", "internal", "shareable"],
+          description: "Filter by visibility level",
+        },
+        include_private: {
+          type: "boolean",
+          description: "Include private memories. Defaults to false",
+        },
         limit: { type: "number", description: "Max results to return (default 20)" },
       },
       required: ["query"],
@@ -41,6 +55,15 @@ export const TOOL_DEFINITIONS = [
       properties: {
         category: { type: "string", description: "Filter by category" },
         project: { type: "string", description: "Filter by project" },
+        visibility: {
+          type: "string",
+          enum: ["private", "internal", "shareable"],
+          description: "Filter by visibility level",
+        },
+        include_private: {
+          type: "boolean",
+          description: "Include private memories. Defaults to false",
+        },
         limit: { type: "number", description: "Max results to return (default 20)" },
         offset: { type: "number", description: "Offset for pagination (default 0)" },
       },
@@ -55,6 +78,15 @@ export const TOOL_DEFINITIONS = [
       properties: {
         category: { type: "string", description: "Filter by category" },
         project: { type: "string", description: "Filter by project" },
+        visibility: {
+          type: "string",
+          enum: ["private", "internal", "shareable"],
+          description: "Filter by visibility level",
+        },
+        include_private: {
+          type: "boolean",
+          description: "Include private memories. Defaults to false",
+        },
         from: {
           type: "string",
           description: "Start datetime (inclusive), format: YYYY-MM-DD HH:MM:SS",
@@ -75,6 +107,10 @@ export const TOOL_DEFINITIONS = [
       type: "object",
       properties: {
         id: { type: "number", description: "The memory ID to retrieve" },
+        include_private: {
+          type: "boolean",
+          description: "Include private memories. Defaults to false",
+        },
       },
       required: ["id"],
     },
@@ -102,6 +138,11 @@ export const TOOL_DEFINITIONS = [
         category: { type: "string", description: "New category" },
         tags: { type: "array", items: { type: "string" }, description: "New tags" },
         project: { type: "string", description: "New project" },
+        visibility: {
+          type: "string",
+          enum: ["private", "internal", "shareable"],
+          description: "New visibility level",
+        },
       },
       required: ["id"],
     },

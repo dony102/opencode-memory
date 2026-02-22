@@ -6,31 +6,40 @@ export interface Memory {
     tags: string;
     project: string;
     source: string;
+    visibility: MemoryVisibility;
     created_at: string;
     updated_at: string;
 }
+export type MemoryVisibility = "private" | "internal" | "shareable";
 export interface SaveMemoryInput {
     content: string;
     title?: string;
     category?: string;
     tags?: string[];
     project?: string;
+    visibility?: MemoryVisibility;
 }
 export interface SearchMemoriesInput {
     query: string;
     category?: string;
     project?: string;
+    visibility?: MemoryVisibility;
+    include_private?: boolean;
     limit?: number;
 }
 export interface ListMemoriesInput {
     category?: string;
     project?: string;
+    visibility?: MemoryVisibility;
+    include_private?: boolean;
     limit?: number;
     offset?: number;
 }
 export interface TimelineMemoriesInput {
     category?: string;
     project?: string;
+    visibility?: MemoryVisibility;
+    include_private?: boolean;
     from?: string;
     to?: string;
     limit?: number;
@@ -43,6 +52,11 @@ export interface UpdateMemoryInput {
     category?: string;
     tags?: string[];
     project?: string;
+    visibility?: MemoryVisibility;
+}
+export interface GetMemoryInput {
+    id: number;
+    include_private?: boolean;
 }
 export interface JsonRpcTextContent {
     type: "text";

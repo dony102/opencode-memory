@@ -113,6 +113,11 @@ mcp:
 | `update_memory` | Patch memory fields |
 | `delete_memory` | Remove memory entries |
 
+Privacy controls:
+
+- `visibility`: `private`, `internal`, `shareable` (set on save/update)
+- Read tools default to excluding private records unless `include_private=true`
+
 ## Usage Examples
 
 - Save context: "Save memory that billing module now uses retry backoff"

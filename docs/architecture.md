@@ -18,6 +18,7 @@ Each memory record includes:
 - `tags` (JSON string)
 - `project`
 - `source`
+- `visibility` (`private`, `internal`, `shareable`)
 - `created_at`
 - `updated_at`
 
@@ -37,6 +38,15 @@ Each memory record includes:
 - Supports optional filters: `category`, `project`, `from`, `to`.
 - `from` and `to` use inclusive boundaries.
 - Uses the same normalized paging controls as list/search (`limit` capped at `100`, `offset >= 0`).
+
+## Privacy policy semantics
+
+- Visibility levels:
+  - `private`: hidden from reads unless `include_private=true`
+  - `internal`: readable by default
+  - `shareable`: readable by default
+- Read paths (`search_memories`, `list_memories`, `timeline_memories`, `get_memory`) exclude private records by default.
+- All read tools support optional `visibility` filter and `include_private` override.
 
 ## Design choices
 

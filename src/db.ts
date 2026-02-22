@@ -5,6 +5,7 @@ import path from "path";
 import fs from "fs";
 import type {
   Memory,
+  MemoryVisibility,
   SaveMemoryInput,
   SearchMemoriesInput,
   ListMemoriesInput,
@@ -19,6 +20,7 @@ const DATA_DIR = path.join(PROJECT_ROOT, "data");
 const DB_PATH = path.join(DATA_DIR, "memories.db");
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
+const DEFAULT_VISIBILITY: MemoryVisibility = "internal";
 
 const normalizeLimit = (limit: number | undefined): number => {
   if (limit === undefined || Number.isNaN(limit)) {
@@ -74,12 +76,46 @@ export class MemoryDB {
         tags TEXT DEFAULT '[]',
         project TEXT DEFAULT '',
         source TEXT DEFAULT 'manual',
+        visibility TEXT DEFAULT 'internal',
         created_at TEXT DEFAULT (datetime('now')),
         updated_at TEXT DEFAULT (datetime('now'))
       );
     `);
 
+    this.ensureVisibilityColumn();
+
     this.persist();
+  }
+
+  private ensureVisibilityColumn(): void {
+    const columns = this.queryAll("PRAGMA table_info(memories)");
+    const hasVisibility = columns.some((column) => column.name === "visibility");
+
+    if (!hasVisibility) {
+      this.getDb().run(
+        "ALTER TABLE memories ADD COLUMN visibility TEXT DEFAULT 'internal'"
+      );
+    }
+
+    this.getDb().run(
+      "UPDATE memories SET visibility = 'internal' WHERE visibility IS NULL OR visibility = ''"
+    );
+  }
+
+  private applyVisibilityFilters(
+    conditions: string[],
+    params: (string | number)[],
+    visibility: MemoryVisibility | undefined,
+    includePrivate: boolean | undefined
+  ): void {
+    if (visibility) {
+      conditions.push("visibility = ?");
+      params.push(visibility);
+    }
+
+    if (!includePrivate) {
+      conditions.push("visibility != 'private'");
+    }
   }
 
   async ready(): Promise<void> {
@@ -124,16 +160,17 @@ export class MemoryDB {
     const category = input.category ?? "general";
     const tags = JSON.stringify(input.tags ?? []);
     const project = input.project ?? "";
+    const visibility = input.visibility ?? DEFAULT_VISIBILITY;
 
     db.run(
-      "INSERT INTO memories (content, title, category, tags, project, source) VALUES (?, ?, ?, ?, ?, 'manual')",
-      [input.content, title, category, tags, project]
+      "INSERT INTO memories (content, title, category, tags, project, source, visibility) VALUES (?, ?, ?, ?, ?, 'manual', ?)",
+      [input.content, title, category, tags, project, visibility]
     );
 
     const row = this.queryOne("SELECT last_insert_rowid() as id");
     const id = Number(row?.id);
 
-    const memory = this.get(id);
+    const memory = this.get(id, true);
     if (!memory) {
       throw new Error("Failed to retrieve saved memory");
     }
@@ -148,7 +185,14 @@ export class MemoryDB {
       .filter((t) => t.length > 0);
 
     if (rawTerms.length === 0) {
-      return this.list({ limit });
+      return this.list({
+        category: input.category,
+        project: input.project,
+        visibility: input.visibility,
+        include_private: input.include_private,
+        limit,
+        offset: 0,
+      });
     }
 
     const conditions: string[] = [];
@@ -186,6 +230,13 @@ export class MemoryDB {
       whereParams.push(input.project);
     }
 
+    this.applyVisibilityFilters(
+      conditions,
+      whereParams,
+      input.visibility,
+      input.include_private
+    );
+
     const whereClause = "WHERE " + conditions.join(" AND ");
     const scoreSql = scoreParts.length > 0 ? scoreParts.join(" + ") : "0";
 
@@ -215,6 +266,13 @@ export class MemoryDB {
       conditions.push("project = ?");
       params.push(input.project);
     }
+
+    this.applyVisibilityFilters(
+      conditions,
+      params,
+      input.visibility,
+      input.include_private
+    );
 
     params.push(limit, offset);
 
@@ -249,6 +307,13 @@ export class MemoryDB {
       params.push(input.to);
     }
 
+    this.applyVisibilityFilters(
+      conditions,
+      params,
+      input.visibility,
+      input.include_private
+    );
+
     params.push(limit, offset);
 
     const whereClause =
@@ -261,14 +326,17 @@ export class MemoryDB {
     return this.queryAll(sql, params) as unknown as Memory[];
   }
 
-  get(id: number): Memory | null {
-    const row = this.queryOne("SELECT * FROM memories WHERE id = ?", [id]);
+  get(id: number, includePrivate = false): Memory | null {
+    const sql = includePrivate
+      ? "SELECT * FROM memories WHERE id = ?"
+      : "SELECT * FROM memories WHERE id = ? AND visibility != 'private'";
+    const row = this.queryOne(sql, [id]);
     return row as unknown as Memory | null;
   }
 
   delete(id: number): boolean {
     const db = this.getDb();
-    const existing = this.get(id);
+    const existing = this.get(id, true);
     if (!existing) {
       return false;
     }
@@ -278,7 +346,7 @@ export class MemoryDB {
   }
 
   update(input: UpdateMemoryInput): Memory | null {
-    const existing = this.get(input.id);
+    const existing = this.get(input.id, true);
     if (!existing) {
       return null;
     }
@@ -306,6 +374,10 @@ export class MemoryDB {
       fields.push("project = ?");
       params.push(input.project);
     }
+    if (input.visibility !== undefined) {
+      fields.push("visibility = ?");
+      params.push(input.visibility);
+    }
 
     if (fields.length === 0) {
       return existing;
@@ -318,7 +390,7 @@ export class MemoryDB {
     this.getDb().run(sql, params);
     this.persist();
 
-    return this.get(input.id);
+    return this.get(input.id, true);
   }
 
   close(): void {

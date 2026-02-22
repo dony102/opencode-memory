@@ -1,5 +1,7 @@
 import type {
+  GetMemoryInput,
   ListMemoriesInput,
+  MemoryVisibility,
   MemoryToolName,
   SaveMemoryInput,
   SearchMemoriesInput,
@@ -9,6 +11,8 @@ import type {
 import { MemoryDB } from "../db.js";
 import {
   getObject,
+  getOptionalBoolean,
+  getOptionalEnum,
   getOptionalNumber,
   getOptionalString,
   getOptionalStringArray,
@@ -16,6 +20,12 @@ import {
   getRequiredString,
 } from "../utils/validation.js";
 import { fail, ok } from "../utils/tool-response.js";
+
+const VISIBILITY_VALUES: readonly MemoryVisibility[] = [
+  "private",
+  "internal",
+  "shareable",
+];
 
 export const handleToolCall = (
   db: MemoryDB,
@@ -33,6 +43,7 @@ export const handleToolCall = (
         category: getOptionalString(input, "category"),
         tags: getOptionalStringArray(input, "tags"),
         project: getOptionalString(input, "project"),
+        visibility: getOptionalEnum(input, "visibility", VISIBILITY_VALUES),
       };
       return ok(db.save(payload));
     }
@@ -42,6 +53,8 @@ export const handleToolCall = (
         query: getRequiredString(input, "query"),
         category: getOptionalString(input, "category"),
         project: getOptionalString(input, "project"),
+        visibility: getOptionalEnum(input, "visibility", VISIBILITY_VALUES),
+        include_private: getOptionalBoolean(input, "include_private"),
         limit: getOptionalNumber(input, "limit"),
       };
       const memories = db.search(payload);
@@ -52,6 +65,8 @@ export const handleToolCall = (
       const payload: ListMemoriesInput = {
         category: getOptionalString(input, "category"),
         project: getOptionalString(input, "project"),
+        visibility: getOptionalEnum(input, "visibility", VISIBILITY_VALUES),
+        include_private: getOptionalBoolean(input, "include_private"),
         limit: getOptionalNumber(input, "limit"),
         offset: getOptionalNumber(input, "offset"),
       };
@@ -63,6 +78,8 @@ export const handleToolCall = (
       const payload: TimelineMemoriesInput = {
         category: getOptionalString(input, "category"),
         project: getOptionalString(input, "project"),
+        visibility: getOptionalEnum(input, "visibility", VISIBILITY_VALUES),
+        include_private: getOptionalBoolean(input, "include_private"),
         from: getOptionalString(input, "from"),
         to: getOptionalString(input, "to"),
         limit: getOptionalNumber(input, "limit"),
@@ -73,10 +90,13 @@ export const handleToolCall = (
     }
 
     case "get_memory": {
-      const id = getRequiredNumber(input, "id");
-      const memory = db.get(id);
+      const payload: GetMemoryInput = {
+        id: getRequiredNumber(input, "id"),
+        include_private: getOptionalBoolean(input, "include_private"),
+      };
+      const memory = db.get(payload.id, payload.include_private ?? false);
       if (!memory) {
-        return fail(`Memory with id ${id} not found`);
+        return fail(`Memory with id ${payload.id} not found`);
       }
       return ok(memory);
     }
@@ -98,6 +118,7 @@ export const handleToolCall = (
         category: getOptionalString(input, "category"),
         tags: getOptionalStringArray(input, "tags"),
         project: getOptionalString(input, "project"),
+        visibility: getOptionalEnum(input, "visibility", VISIBILITY_VALUES),
       };
       const memory = db.update(payload);
       if (!memory) {

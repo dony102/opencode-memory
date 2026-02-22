@@ -14,6 +14,13 @@
 - Added offset pagination support for timeline results
 - Documented timeline semantics in architecture and roadmap docs
 
+## 1.4.0 (in progress)
+
+- Added visibility policy model (`private`, `internal`, `shareable`) in data schema
+- Enforced privacy filtering on read paths by default (private hidden unless requested)
+- Added visibility filters and `include_private` controls to retrieval tools
+- Documented privacy governance model in architecture and operations docs
+
 ## 1.1.0
 
 - Re-architected MCP server into modular folders (`constants`, `handlers`, `servers`, `utils`)

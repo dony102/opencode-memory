@@ -72,3 +72,34 @@ export const getOptionalStringArray = (
   }
   return value;
 };
+
+export const getOptionalBoolean = (
+  source: Record<string, unknown>,
+  key: string
+): boolean | undefined => {
+  const value = source[key];
+  if (value === undefined) {
+    return undefined;
+  }
+  if (typeof value !== "boolean") {
+    throw new Error(`Invalid '${key}': expected boolean`);
+  }
+  return value;
+};
+
+export const getOptionalEnum = <T extends string>(
+  source: Record<string, unknown>,
+  key: string,
+  allowed: readonly T[]
+): T | undefined => {
+  const value = source[key];
+  if (value === undefined) {
+    return undefined;
+  }
+  if (typeof value !== "string" || !allowed.includes(value as T)) {
+    throw new Error(
+      `Invalid '${key}': expected one of ${allowed.join(", ")}`
+    );
+  }
+  return value as T;
+};

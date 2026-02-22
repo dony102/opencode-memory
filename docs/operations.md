@@ -36,3 +36,15 @@ If merge conflict occurs in workflow:
 3. Resolve conflicts.
 4. Run `npm run build`.
 5. Push to origin.
+
+## Privacy governance model
+
+- `visibility=private`: hidden from normal reads; requires `include_private=true`.
+- `visibility=internal`: visible to default reads.
+- `visibility=shareable`: visible to default reads and preferred for collaboration exports.
+
+Recommended policy:
+
+1. Default to `internal`.
+2. Use `private` for sensitive implementation notes or credentials-adjacent context.
+3. Use `shareable` for architecture decisions intended for team-wide recall.

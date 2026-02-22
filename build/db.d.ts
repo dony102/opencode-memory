@@ -4,6 +4,8 @@ export declare class MemoryDB {
     private initPromise;
     constructor();
     private initialize;
+    private ensureVisibilityColumn;
+    private applyVisibilityFilters;
     ready(): Promise<void>;
     private getDb;
     private persist;
@@ -13,7 +15,7 @@ export declare class MemoryDB {
     search(input: SearchMemoriesInput): Memory[];
     list(input: ListMemoriesInput): Memory[];
     timeline(input: TimelineMemoriesInput): Memory[];
-    get(id: number): Memory | null;
+    get(id: number, includePrivate?: boolean): Memory | null;
     delete(id: number): boolean;
     update(input: UpdateMemoryInput): Memory | null;
     close(): void;
