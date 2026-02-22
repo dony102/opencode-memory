@@ -1,0 +1,19 @@
+{
+  "name": "opencode-mem",
+  "version": "1.0.0",
+  "description": "Persistent memory system for OpenCode sessions",
+  "type": "module",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "sql.js": "^1.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.0",
+    "typescript": "^5.8.3"
+  }
+}
