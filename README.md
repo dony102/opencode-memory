@@ -95,7 +95,7 @@ mcp:
     type: stdio
     command: node
     args:
-      - C:/Users/WINDOWS 10/.gemini/antigravity/opencode-mem/build/index.js
+      - /absolute/path/to/opencode-mem/build/index.js
 ---
 ```
 
@@ -122,7 +122,7 @@ Privacy controls:
 
 - Save context: "Save memory that billing module now uses retry backoff"
 - Search context: "Search memories about billing retry"
-- Timeline view: "Show timeline memories for project PromptForge from 2026-02-01 00:00:00"
+- Timeline view: "Show timeline memories for project my-app from 2026-02-01 00:00:00"
 
 Manual tool call example:
 
@@ -131,7 +131,7 @@ skill_mcp(
   mcp_name="opencode-mem",
   tool_name="timeline_memories",
   arguments={
-    project: "PromptForge",
+    project: "my-app",
     from: "2026-02-01 00:00:00",
     to: "2026-02-22 23:59:59",
     limit: 20,
@@ -149,14 +149,14 @@ Example response:
     {
       "id": 41,
       "title": "Retry backoff rollout",
-      "project": "PromptForge",
+      "project": "my-app",
       "category": "architecture",
       "created_at": "2026-02-20 09:11:02"
     },
     {
       "id": 42,
       "title": "Billing timeout patch",
-      "project": "PromptForge",
+      "project": "my-app",
       "category": "bugfix",
       "created_at": "2026-02-21 14:26:18"
     }

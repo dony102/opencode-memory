@@ -22,7 +22,7 @@ mcp:
     type: stdio
     command: node
     args:
-      - C:/Users/WINDOWS 10/.gemini/antigravity/opencode-mem/build/index.js
+      - /absolute/path/to/opencode-mem/build/index.js
 ---
 ```
 
@@ -34,8 +34,8 @@ Use any of these prompts in a new session:
 
 - "Save memory that we use JWT auth in src/auth/"
 - "Search memories about auth"
-- "List memories for project PromptForge"
-- "Show timeline memories for project PromptForge from 2026-02-01 00:00:00"
+- "List memories for project my-app"
+- "Show timeline memories for project my-app from 2026-02-01 00:00:00"
 
 ## 4) Database location
 
