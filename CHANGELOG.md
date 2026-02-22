@@ -1,25 +1,23 @@
 # Changelog
 
-## 1.2.0 (in progress)
+## 1.4.0 (2026-02-22)
 
 - Upgraded search relevance with weighted ranking across title/content/category/tags/project
 - Added deterministic ordering for search results (`relevance_score`, `updated_at`, `id`)
 - Added normalized limits with hard caps for list/search requests
-- Updated architecture docs with explicit retrieval semantics
-
-## 1.3.0 (in progress)
-
 - Added `timeline_memories` MCP tool for chronological retrieval
 - Added optional filters (`project`, `category`, `from`, `to`) for timeline queries
 - Added offset pagination support for timeline results
-- Documented timeline semantics in architecture and roadmap docs
-
-## 1.4.0 (in progress)
-
 - Added visibility policy model (`private`, `internal`, `shareable`) in data schema
 - Enforced privacy filtering on read paths by default (private hidden unless requested)
 - Added visibility filters and `include_private` controls to retrieval tools
-- Documented privacy governance model in architecture and operations docs
+- Added timeline and privacy test coverage
+- Updated architecture, operations, README, and parity roadmap docs
+
+## Unreleased
+
+- Planned: redaction helper for controlled exports
+- Planned: viewer module and backup/restore operations
 
 ## 1.1.0
 

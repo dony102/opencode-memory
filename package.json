@@ -1,6 +1,6 @@
 {
   "name": "opencode-mem",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "description": "Persistent memory system for OpenCode sessions",
   "type": "module",
   "main": "build/index.js",

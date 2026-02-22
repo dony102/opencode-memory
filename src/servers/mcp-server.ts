@@ -9,7 +9,7 @@ import { handleToolCall } from "../handlers/tool-router.js";
 
 export const createMcpServer = (db: MemoryDB): Server => {
   const server = new Server(
-    { name: "opencode-mem", version: "1.1.0" },
+    { name: "opencode-mem", version: "1.4.0" },
     { capabilities: { tools: {} } }
   );
 
