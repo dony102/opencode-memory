@@ -45,6 +45,7 @@ opencode-memory/
     edition-differences.md
     getting-started.md
     operations.md
+    parity-matrix.md
   src/
     constants/
       tool-definitions.ts
@@ -124,6 +125,7 @@ mcp:
 - Edition differences from upstream: `docs/edition-differences.md`
 - Getting Started: `docs/getting-started.md`
 - Operations and Update Strategy: `docs/operations.md`
+- Feature parity matrix: `docs/parity-matrix.md`
 - Contributing guide: `CONTRIBUTING.md`
 - Changelog: `CHANGELOG.md`
 
