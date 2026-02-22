@@ -3,6 +3,7 @@ import type {
   MemoryToolName,
   SaveMemoryInput,
   SearchMemoriesInput,
+  TimelineMemoriesInput,
   UpdateMemoryInput,
 } from "../types.js";
 import { MemoryDB } from "../db.js";
@@ -55,6 +56,19 @@ export const handleToolCall = (
         offset: getOptionalNumber(input, "offset"),
       };
       const memories = db.list(payload);
+      return ok({ count: memories.length, memories });
+    }
+
+    case "timeline_memories": {
+      const payload: TimelineMemoriesInput = {
+        category: getOptionalString(input, "category"),
+        project: getOptionalString(input, "project"),
+        from: getOptionalString(input, "from"),
+        to: getOptionalString(input, "to"),
+        limit: getOptionalNumber(input, "limit"),
+        offset: getOptionalNumber(input, "offset"),
+      };
+      const memories = db.timeline(payload);
       return ok({ count: memories.length, memories });
     }
 

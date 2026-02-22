@@ -22,7 +22,7 @@ This document converts parity goals into measurable release milestones.
 | Core MCP server | Stable tool interface and dispatch | Completed | 6 tools callable; JSON responses; startup/shutdown clean |
 | Storage engine | Durable memory persistence | Completed | `data/memories.db` survives restart; CRUD verified |
 | Query layer | Practical retrieval quality | In Progress | Weighted ranking + deterministic ordering + normalized limits |
-| Timeline retrieval | Chronological context reconstruction | Planned | `timeline_memories` tool returns ordered events with paging |
+| Timeline retrieval | Chronological context reconstruction | In Progress | `timeline_memories` tool added with filters and offset paging |
 | Compression/Summary | Reduce noise from long memory sets | Planned | Summarization pipeline generates compact session briefs |
 | Privacy controls | Respect sensitive memory boundaries | Planned | Tag-based filter (`private/internal/shareable`) enforced in read paths |
 | Read-only viewer UI | Human-friendly history exploration | Planned | Lightweight docs UI can browse/filter memories |
@@ -51,9 +51,9 @@ This document converts parity goals into measurable release milestones.
 
 **Theme:** Session chronology and change narrative.
 
-- [ ] Add `timeline_memories` MCP tool
-- [ ] Support filters by project/category/date range
-- [ ] Add pagination contract (`cursor` or `offset`)
+- [x] Add `timeline_memories` MCP tool
+- [x] Support filters by project/category/date range
+- [x] Add pagination contract (`cursor` or `offset`)
 - [ ] Add timeline examples in docs and README
 
 **Definition of Done:**

@@ -8,6 +8,7 @@ import type {
   SaveMemoryInput,
   SearchMemoriesInput,
   ListMemoriesInput,
+  TimelineMemoriesInput,
   UpdateMemoryInput,
 } from "./types.js";
 
@@ -221,6 +222,41 @@ export class MemoryDB {
       conditions.length > 0 ? "WHERE " + conditions.join(" AND ") : "";
 
     const sql = "SELECT * FROM memories " + whereClause + " ORDER BY created_at DESC LIMIT ? OFFSET ?";
+
+    return this.queryAll(sql, params) as unknown as Memory[];
+  }
+
+  timeline(input: TimelineMemoriesInput): Memory[] {
+    const limit = normalizeLimit(input.limit);
+    const offset = normalizeOffset(input.offset);
+    const conditions: string[] = [];
+    const params: (string | number)[] = [];
+
+    if (input.category) {
+      conditions.push("category = ?");
+      params.push(input.category);
+    }
+    if (input.project) {
+      conditions.push("project = ?");
+      params.push(input.project);
+    }
+    if (input.from) {
+      conditions.push("created_at >= ?");
+      params.push(input.from);
+    }
+    if (input.to) {
+      conditions.push("created_at <= ?");
+      params.push(input.to);
+    }
+
+    params.push(limit, offset);
+
+    const whereClause =
+      conditions.length > 0 ? "WHERE " + conditions.join(" AND ") : "";
+    const sql =
+      "SELECT * FROM memories " +
+      whereClause +
+      " ORDER BY created_at ASC, id ASC LIMIT ? OFFSET ?";
 
     return this.queryAll(sql, params) as unknown as Memory[];
   }

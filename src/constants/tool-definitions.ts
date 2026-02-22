@@ -47,6 +47,28 @@ export const TOOL_DEFINITIONS = [
     },
   },
   {
+    name: "timeline_memories",
+    description:
+      "Return memories in chronological order with optional date range and filters.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        category: { type: "string", description: "Filter by category" },
+        project: { type: "string", description: "Filter by project" },
+        from: {
+          type: "string",
+          description: "Start datetime (inclusive), format: YYYY-MM-DD HH:MM:SS",
+        },
+        to: {
+          type: "string",
+          description: "End datetime (inclusive), format: YYYY-MM-DD HH:MM:SS",
+        },
+        limit: { type: "number", description: "Max results to return (default 20, max 100)" },
+        offset: { type: "number", description: "Offset for pagination (default 0)" },
+      },
+    },
+  },
+  {
     name: "get_memory",
     description: "Get a specific memory by its ID.",
     inputSchema: {

@@ -14,7 +14,7 @@ Persistent memory infrastructure for OpenCode sessions: fast, local-first, and p
 
 - OpenCode-native MCP server over stdio
 - SQLite persistence via `sql.js` (no native binary dependency)
-- Six memory tools for full CRUD + search
+- Seven memory tools for CRUD + search + timeline
 - Update automation (`scripts/update.sh`, `scripts/update.bat`, GitHub Actions)
 - Premium docs with architecture and operations visuals
 
@@ -108,9 +108,32 @@ mcp:
 | `save_memory` | Create memory entries |
 | `search_memories` | Search content/title/category/tags |
 | `list_memories` | Paginated memory listing |
+| `timeline_memories` | Chronological history with optional date range filters |
 | `get_memory` | Fetch single memory by id |
 | `update_memory` | Patch memory fields |
 | `delete_memory` | Remove memory entries |
+
+## Usage Examples
+
+- Save context: "Save memory that billing module now uses retry backoff"
+- Search context: "Search memories about billing retry"
+- Timeline view: "Show timeline memories for project PromptForge from 2026-02-01 00:00:00"
+
+Manual tool call example:
+
+```javascript
+skill_mcp(
+  mcp_name="opencode-mem",
+  tool_name="timeline_memories",
+  arguments={
+    project: "PromptForge",
+    from: "2026-02-01 00:00:00",
+    to: "2026-02-22 23:59:59",
+    limit: 20,
+    offset: 0,
+  }
+)
+```
 
 ## Auto Update Paths
 

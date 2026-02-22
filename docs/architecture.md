@@ -26,9 +26,17 @@ Each memory record includes:
 - `save_memory`
 - `search_memories`
 - `list_memories`
+- `timeline_memories`
 - `get_memory`
 - `update_memory`
 - `delete_memory`
+
+## Timeline semantics (`timeline_memories`)
+
+- Returns memories in chronological order (`created_at ASC`, then `id ASC`).
+- Supports optional filters: `category`, `project`, `from`, `to`.
+- `from` and `to` use inclusive boundaries.
+- Uses the same normalized paging controls as list/search (`limit` capped at `100`, `offset >= 0`).
 
 ## Design choices
 

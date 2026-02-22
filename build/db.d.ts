@@ -1,4 +1,4 @@
-import type { Memory, SaveMemoryInput, SearchMemoriesInput, ListMemoriesInput, UpdateMemoryInput } from "./types.js";
+import type { Memory, SaveMemoryInput, SearchMemoriesInput, ListMemoriesInput, TimelineMemoriesInput, UpdateMemoryInput } from "./types.js";
 export declare class MemoryDB {
     private db;
     private initPromise;
@@ -12,6 +12,7 @@ export declare class MemoryDB {
     save(input: SaveMemoryInput): Memory;
     search(input: SearchMemoriesInput): Memory[];
     list(input: ListMemoriesInput): Memory[];
+    timeline(input: TimelineMemoriesInput): Memory[];
     get(id: number): Memory | null;
     delete(id: number): boolean;
     update(input: UpdateMemoryInput): Memory | null;

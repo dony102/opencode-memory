@@ -32,6 +32,15 @@ export interface ListMemoriesInput {
   offset?: number;
 }
 
+export interface TimelineMemoriesInput {
+  category?: string;
+  project?: string;
+  from?: string;
+  to?: string;
+  limit?: number;
+  offset?: number;
+}
+
 export interface UpdateMemoryInput {
   id: number;
   content?: string;
@@ -55,6 +64,7 @@ export type MemoryToolName =
   | "save_memory"
   | "search_memories"
   | "list_memories"
+  | "timeline_memories"
   | "get_memory"
   | "delete_memory"
   | "update_memory";

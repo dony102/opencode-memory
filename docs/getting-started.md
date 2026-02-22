@@ -35,6 +35,7 @@ Use any of these prompts in a new session:
 - "Save memory that we use JWT auth in src/auth/"
 - "Search memories about auth"
 - "List memories for project PromptForge"
+- "Show timeline memories for project PromptForge from 2026-02-01 00:00:00"
 
 ## 4) Database location
 
