@@ -54,7 +54,7 @@ This document converts parity goals into measurable release milestones.
 - [x] Add `timeline_memories` MCP tool
 - [x] Support filters by project/category/date range
 - [x] Add pagination contract (`cursor` or `offset`)
-- [ ] Add timeline examples in docs and README
+- [x] Add timeline examples in docs and README
 
 **Definition of Done:**
 - Tool appears in `ListTools` with schema

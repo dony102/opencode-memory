@@ -135,6 +135,30 @@ skill_mcp(
 )
 ```
 
+Example response:
+
+```json
+{
+  "count": 2,
+  "memories": [
+    {
+      "id": 41,
+      "title": "Retry backoff rollout",
+      "project": "PromptForge",
+      "category": "architecture",
+      "created_at": "2026-02-20 09:11:02"
+    },
+    {
+      "id": 42,
+      "title": "Billing timeout patch",
+      "project": "PromptForge",
+      "category": "bugfix",
+      "created_at": "2026-02-21 14:26:18"
+    }
+  ]
+}
+```
+
 ## Auto Update Paths
 
 - Manual one-shot:
