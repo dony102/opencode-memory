@@ -92,7 +92,7 @@ export class MemoryDB {
     search(input) {
         const limit = input.limit ?? 20;
         const rawTerms = input.query
-            .split(/s+/)
+            .split(/\s+/)
             .filter((t) => t.length > 0);
         if (rawTerms.length === 0) {
             return this.list({ limit });

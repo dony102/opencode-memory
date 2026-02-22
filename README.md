@@ -42,16 +42,28 @@ opencode-memory/
       update-flow.svg
   docs/
     architecture.md
+    edition-differences.md
     getting-started.md
     operations.md
-  scripts/
-    update.bat
-    update.sh
   src/
+    constants/
+      tool-definitions.ts
+    handlers/
+      tool-router.ts
+    servers/
+      mcp-server.ts
+    utils/
+      tool-response.ts
+      validation.ts
     db.ts
     index.ts
     sql.js.d.ts
     types.ts
+  CHANGELOG.md
+  CONTRIBUTING.md
+  scripts/
+    update.bat
+    update.sh
   .gitignore
   package.json
   README.md
@@ -109,8 +121,11 @@ mcp:
 ## Documentation
 
 - Architecture: `docs/architecture.md`
+- Edition differences from upstream: `docs/edition-differences.md`
 - Getting Started: `docs/getting-started.md`
 - Operations and Update Strategy: `docs/operations.md`
+- Contributing guide: `CONTRIBUTING.md`
+- Changelog: `CHANGELOG.md`
 
 ## License
 

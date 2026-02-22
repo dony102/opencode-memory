@@ -40,3 +40,21 @@ export interface UpdateMemoryInput {
   tags?: string[];
   project?: string;
 }
+
+export interface JsonRpcTextContent {
+  type: "text";
+  text: string;
+}
+
+export interface ToolResult {
+  content: JsonRpcTextContent[];
+  isError?: boolean;
+}
+
+export type MemoryToolName =
+  | "save_memory"
+  | "search_memories"
+  | "list_memories"
+  | "get_memory"
+  | "delete_memory"
+  | "update_memory";
