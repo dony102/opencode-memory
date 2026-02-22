@@ -1,100 +1,117 @@
 # opencode-memory
 
-Persistent memory system for OpenCode sessions — inspired by [claude-mem](https://github.com/thedotmack/claude-mem), adapted for OpenCode (OhMyOpenCode/Antigravity).
+<p align="center">
+  <img src="assets/diagrams/hero.svg" alt="opencode-memory hero" width="100%" />
+</p>
 
-## What is this?
+Persistent memory infrastructure for OpenCode sessions: fast, local-first, and production-friendly.
 
-opencode-memory gives OpenCode persistent memory across coding sessions. Save architecture decisions, bug fixes, and learnings — then recall them in future sessions.
+## Why This Repository Exists
 
-**Unlike claude-mem**: This is a standalone MCP server without auto-capture hooks (OpenCode doesn't support Claude Code hooks). You save memories manually, but they're searchable and persistent.
+`claude-mem` is designed for Claude Code hooks. OpenCode has a different runtime model, so this project provides an OpenCode-native implementation while preserving the same core goal: memory that survives across sessions.
 
-## Features
+## Highlights
 
-- **SQLite + Full-Text Search** — Fast local storage with FTS5
-- **6 MCP Tools**: save_memory, search_memories, list_memories, get_memory, update_memory, delete_memory
-- **Category & Tag Filtering** — Organize memories by project/category/tags
-- **OpenCode Native** — Registered as a skill, survives config restarts
+- OpenCode-native MCP server over stdio
+- SQLite persistence via `sql.js` (no native binary dependency)
+- Six memory tools for full CRUD + search
+- Update automation (`scripts/update.sh`, `scripts/update.bat`, GitHub Actions)
+- Premium docs with architecture and operations visuals
 
-## Installation
+## Visual Architecture
 
-### 1. Clone this repo
+<p align="center">
+  <img src="assets/diagrams/architecture.svg" alt="Architecture diagram" width="100%" />
+</p>
+
+<p align="center">
+  <img src="assets/diagrams/update-flow.svg" alt="Update flow diagram" width="100%" />
+</p>
+
+## Modern Repository Structure
+
+```text
+opencode-memory/
+  .github/
+    workflows/
+      auto-update.yml
+  assets/
+    diagrams/
+      architecture.svg
+      hero.svg
+      update-flow.svg
+  docs/
+    architecture.md
+    getting-started.md
+    operations.md
+  scripts/
+    update.bat
+    update.sh
+  src/
+    db.ts
+    index.ts
+    sql.js.d.ts
+    types.ts
+  .gitignore
+  package.json
+  README.md
+  tsconfig.json
+  update.bat          # compatibility wrapper
+  update.sh           # compatibility wrapper
+```
+
+## Quick Start
+
+1. Install dependencies and build:
 
 ```bash
-git clone https://github.com/dony102/opencode-memory.git
-cd opencode-memory
 npm install
 npm run build
 ```
 
-### 2. Install as OpenCode Skill
+2. Register the skill in OpenCode:
 
-The skill is pre-configured in `~/.config/opencode/skills/opencode-mem/SKILL.md`. Just restart OpenCode.
+`~/.config/opencode/skills/opencode-mem/SKILL.md`
 
-### 3. Verify
-
-After restart, test:
-```
-skill_mcp(mcp_name="opencode-mem", tool_name="list_memories", arguments={limit:5})
-```
-
-## Usage
-
-### Natural Language (Recommended)
-
-Just tell the AI naturally:
-- *"Save memory that we use JWT auth in src/auth/"*
-- *"Search memories about auth"*
-- *"List all memories for project X"*
-
-### Manual Tool Calls
-
-```javascript
-// Save a memory
-skill_mcp(mcp_name="opencode-mem", tool_name="save_memory", arguments={
-  content: "Refactored auth from session-based to JWT",
-  title: "Auth refactor to JWT", 
-  category: "architecture",
-  tags: ["auth", "jwt"],
-  project: "my-app"
-})
-
-// Search memories
-skill_mcp(mcp_name="opencode-mem", tool_name="search_memories", arguments={
-  query: "auth jwt"
-})
-
-// List recent memories
-skill_mcp(mcp_name="opencode-mem", tool_name="list_memories", arguments={
-  limit: 10
-})
+```md
+---
+name: opencode-mem
+description: Persistent memory for OpenCode.
+mcp:
+  opencode-mem:
+    type: stdio
+    command: node
+    args:
+      - C:/Users/WINDOWS 10/.gemini/antigravity/opencode-mem/build/index.js
+---
 ```
 
-## Updating from Upstream
+3. Restart OpenCode.
 
-This repo tracks [claude-mem](https://github.com/thedotmack/claude-mem) as upstream. To pull updates:
+## MCP Tools
 
-```bash
-git fetch upstream
-git checkout main
-git merge upstream/main
-# Resolve any conflicts
-git push origin main
-```
+| Tool | Purpose |
+| --- | --- |
+| `save_memory` | Create memory entries |
+| `search_memories` | Search content/title/category/tags |
+| `list_memories` | Paginated memory listing |
+| `get_memory` | Fetch single memory by id |
+| `update_memory` | Patch memory fields |
+| `delete_memory` | Remove memory entries |
 
-## Project Structure
+## Auto Update Paths
 
-```
-opencode-memory/
-├── src/
-│   ├── index.ts      # MCP server entry point
-│   ├── db.ts        # SQLite + FTS5 layer
-│   └── types.ts     # TypeScript interfaces
-├── build/           # Compiled JS
-├── data/            # SQLite database (created on first run)
-├── package.json
-└── tsconfig.json
-```
+- Manual one-shot:
+  - Windows: `update.bat auto`
+  - Bash: `./update.sh --auto`
+- Scheduled automation: `.github/workflows/auto-update.yml`
+
+## Documentation
+
+- Architecture: `docs/architecture.md`
+- Getting Started: `docs/getting-started.md`
+- Operations and Update Strategy: `docs/operations.md`
 
 ## License
 
-AGPL-3.0 — Same as claude-mem.
+AGPL-3.0

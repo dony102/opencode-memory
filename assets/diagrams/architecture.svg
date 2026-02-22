@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="opencode-memory architecture diagram">
+  <defs>
+    <style>
+      .title { font: 700 34px 'Segoe UI', Arial, sans-serif; fill: #eaf3ff; }
+      .subtitle { font: 500 18px 'Segoe UI', Arial, sans-serif; fill: #bfd3ea; }
+      .label { font: 600 18px 'Segoe UI', Arial, sans-serif; fill: #10233f; }
+      .text { font: 500 14px 'Segoe UI', Arial, sans-serif; fill: #19355e; }
+      .arrow { stroke: #8cb7e5; stroke-width: 3; marker-end: url(#arrowhead); }
+    </style>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0c1322"/>
+      <stop offset="100%" stop-color="#1a2d49"/>
+    </linearGradient>
+    <linearGradient id="box" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dfefff"/>
+      <stop offset="100%" stop-color="#bcd8f4"/>
+    </linearGradient>
+    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#8cb7e5"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="720" fill="url(#bg)"/>
+  <text x="70" y="66" class="title">opencode-memory: runtime architecture</text>
+  <text x="70" y="98" class="subtitle">From prompt-level memory capture to persistent retrieval across sessions</text>
+
+  <rect x="70" y="160" width="260" height="120" rx="14" fill="url(#box)"/>
+  <text x="98" y="198" class="label">OpenCode Agent</text>
+  <text x="98" y="225" class="text">User prompts + tool orchestration</text>
+  <text x="98" y="245" class="text">Natural language memory requests</text>
+
+  <rect x="460" y="140" width="300" height="160" rx="14" fill="url(#box)"/>
+  <text x="488" y="178" class="label">MCP Server (`src/index.ts`)</text>
+  <text x="488" y="205" class="text">Stdio transport</text>
+  <text x="488" y="225" class="text">6 tools: save/search/list/get/update/delete</text>
+  <text x="488" y="245" class="text">Input schema validation and JSON response</text>
+  <text x="488" y="265" class="text">Graceful shutdown + persistence close</text>
+
+  <rect x="890" y="160" width="240" height="120" rx="14" fill="url(#box)"/>
+  <text x="918" y="198" class="label">DB Layer (`src/db.ts`)</text>
+  <text x="918" y="225" class="text">CRUD + search abstraction</text>
+  <text x="918" y="245" class="text">Disk sync after write</text>
+
+  <rect x="460" y="400" width="300" height="180" rx="14" fill="url(#box)"/>
+  <text x="488" y="438" class="label">SQLite (`sql.js`)</text>
+  <text x="488" y="465" class="text">`data/memories.db` file-backed</text>
+  <text x="488" y="485" class="text">Columns: content/title/category/tags/project</text>
+  <text x="488" y="505" class="text">Timestamps + source attribution</text>
+  <text x="488" y="525" class="text">LIKE-based multi-field search</text>
+  <text x="488" y="545" class="text">Portable: no native addon required</text>
+
+  <rect x="70" y="440" width="260" height="120" rx="14" fill="url(#box)"/>
+  <text x="98" y="478" class="label">Skill Config</text>
+  <text x="98" y="505" class="text">`~/.config/opencode/skills/opencode-mem/SKILL.md`</text>
+  <text x="98" y="525" class="text">Registers MCP server for all sessions</text>
+
+  <line x1="330" y1="220" x2="460" y2="220" class="arrow"/>
+  <line x1="760" y1="220" x2="890" y2="220" class="arrow"/>
+  <line x1="610" y1="300" x2="610" y2="400" class="arrow"/>
+  <line x1="330" y1="500" x2="460" y2="500" class="arrow"/>
+
+  <text x="70" y="654" class="subtitle">Operational principle: store high-value decisions early, retrieve context before coding, and keep updates automated.</text>
+</svg>

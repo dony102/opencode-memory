@@ -1,0 +1,12 @@
+node_modules/
+build/
+data/
+*.log
+*.tmp
+*.db
+*.sqlite
+dist/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

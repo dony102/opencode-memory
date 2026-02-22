@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-label="auto update workflow diagram">
+  <defs>
+    <style>
+      .title { font: 700 32px 'Segoe UI', Arial, sans-serif; fill: #ebf4ff; }
+      .sub { font: 500 17px 'Segoe UI', Arial, sans-serif; fill: #c1d6f1; }
+      .nodeTitle { font: 700 18px 'Segoe UI', Arial, sans-serif; fill: #0f2a4a; }
+      .nodeText { font: 500 14px 'Segoe UI', Arial, sans-serif; fill: #1e436f; }
+      .arrow { stroke: #88b3e3; stroke-width: 3; marker-end: url(#a); }
+    </style>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1221"/>
+      <stop offset="100%" stop-color="#142b4a"/>
+    </linearGradient>
+    <linearGradient id="n" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d9ebff"/>
+      <stop offset="100%" stop-color="#b6d4f5"/>
+    </linearGradient>
+    <marker id="a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#88b3e3"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="620" fill="url(#bg)"/>
+  <text x="70" y="62" class="title">Automated update and deploy pipeline</text>
+  <text x="70" y="92" class="sub">Scheduled sync from upstream claude-mem into your OpenCode-adapted repository</text>
+
+  <rect x="70" y="170" width="250" height="120" rx="14" fill="url(#n)"/>
+  <text x="98" y="208" class="nodeTitle">1) Upstream Source</text>
+  <text x="98" y="235" class="nodeText">thedotmack/claude-mem</text>
+  <text x="98" y="255" class="nodeText">new commits detected</text>
+
+  <rect x="390" y="170" width="250" height="120" rx="14" fill="url(#n)"/>
+  <text x="418" y="208" class="nodeTitle">2) GitHub Action</text>
+  <text x="418" y="235" class="nodeText">scheduled / manual trigger</text>
+  <text x="418" y="255" class="nodeText">fetch + compare hashes</text>
+
+  <rect x="710" y="170" width="250" height="120" rx="14" fill="url(#n)"/>
+  <text x="738" y="208" class="nodeTitle">3) Merge + Build</text>
+  <text x="738" y="235" class="nodeText">merge upstream branch</text>
+  <text x="738" y="255" class="nodeText">npm ci + npm run build</text>
+
+  <rect x="930" y="370" width="220" height="120" rx="14" fill="url(#n)"/>
+  <text x="956" y="408" class="nodeTitle">4) Push Result</text>
+  <text x="956" y="435" class="nodeText">commit automation output</text>
+  <text x="956" y="455" class="nodeText">update origin repository</text>
+
+  <rect x="550" y="370" width="280" height="120" rx="14" fill="url(#n)"/>
+  <text x="578" y="408" class="nodeTitle">5) Local Consumption</text>
+  <text x="578" y="435" class="nodeText">git pull in local install</text>
+  <text x="578" y="455" class="nodeText">restart OpenCode session</text>
+
+  <line x1="320" y1="230" x2="390" y2="230" class="arrow"/>
+  <line x1="640" y1="230" x2="710" y2="230" class="arrow"/>
+  <line x1="960" y1="290" x2="1040" y2="370" class="arrow"/>
+  <line x1="930" y1="430" x2="830" y2="430" class="arrow"/>
+
+  <text x="70" y="560" class="sub">This pipeline removes daily manual maintenance while preserving an OpenCode-specific implementation layer.</text>
+</svg>
